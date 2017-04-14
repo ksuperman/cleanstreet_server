@@ -8,6 +8,9 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var users = require('./routes/users');
 var images = require('./routes/images');
+var tools = require('./routes/tools');
+mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/clean_street');
 
 var app = express();
 
@@ -18,8 +21,8 @@ app.set('view engine', 'ejs');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use(cookieParser());
 app.use(require('node-sass-middleware')({
   src: path.join(__dirname, 'public'),
@@ -29,10 +32,12 @@ app.use(require('node-sass-middleware')({
 }));
 app.use('/bower_components',express.static(path.join(__dirname, 'bower_components')));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('images'));
 
 app.use('/', index);
 app.use('/users', users);
 app.use('/images', images);
+app.use('/tools', tools);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
