@@ -18,6 +18,7 @@
   "dependencies": {
     "jquery": "^3.2.1",
     "bootstrap": "^3.3.7",
-    "angular": "1"
+    "angular": "1",
+    "materialize": "^0.98.1"
   }
 }

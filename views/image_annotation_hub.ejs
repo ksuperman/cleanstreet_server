@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <!-- Browser Meta Info -->
+    <link rel="shortcut icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Wikivoyage_fantasy_balloon_logo4_lenkastabilo_blues_favicon.svg/2000px-Wikivoyage_fantasy_balloon_logo4_lenkastabilo_blues_favicon.svg.png" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Core Styling CSS -->
+    <link rel="stylesheet" type="text/css" href="../bower_components/materialize/dist/css/materialize.css" media="screen,projection">
+
+    <!-- Core Scripts Init -->
+    <script src="../bower_components/jquery/dist/jquery.js"></script>
+    <script src="../bower_components/materialize/dist/js/materialize.js"></script>
+    <script src="../bower_components/angular/angular.min.js"></script>
+
+    <!-- Angular Application Init -->
+    <script src="static/js/app.js"></script>
+    <script src="static/js/controllers/AnnotationHubContoller.js"></script>
+    <script src="static/js/controllers/HeaderController.js"></script>
+    <script src="static/js/controllers/PendingImagesController.js"></script>
+    <script src="static/js/controllers/ReviewedImagesController.js"></script>
+    <script src="static/js/controllers/ImageUploadController.js"></script>
+    <style>
+        html{
+            height: 100%;
+            width: 100%;
+        }
+
+        body{
+            height: 100%;
+            width: 100%;
+        }
+        #content-container {
+            padding: 0px 10px;
+        }
+
+        .nav-tabs {
+            border-bottom: 0;
+        }
+
+        .tab-content {
+            margin-top: 10px;
+            padding: 10px 0px;
+            background: rgba(128, 128, 128, 0.14);
+            border-radius: 10px;
+        }
+        i.material-icons.header-icon {
+            font-size: 37px;
+        }
+    </style>
+</head>
+<body ng-app="CleanStreetToolApplication">
+<nav class="nav-extended" ng-controller="HeaderController">
+    <div class="nav-wrapper">
+        <a href="#!" class="brand-logo"><i class="material-icons header-icon">dashboard</i>Clean Streets</a>
+        <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="#">Github</a></li>
+        </ul>
+        <ul class="side-nav" id="mobile-demo">
+            <li><a href="#">Github</a></li>
+        </ul>
+    </div>
+    <div class="nav-content">
+        <button href="#imageUploadModal" data-target="imageUploadModal" class="btn-floating btn-large halfway-fab waves-effect waves-light teal">
+            <i class="material-icons">add</i>
+        </button>
+        <ul class="tabs tabs-transparent">
+            <li class="tab"><a class="active" href="#pendingImages">Pending Images</a></li>
+            <li class="tab"><a href="#reviewedImages">Reviewed Images</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div id='content-container'>
+    <div id="mt-top-nohover">
+        <div id="mt-instructions">
+            <h4>Clean Streets Image Annotation Tool</h4>
+        </div>
+    </div>
+    <div id="exTab1" class="nav-tabs" ng-controller="AnnotationHubController">
+        <div class="tab-content clearfix">
+            <div id="pendingImages" class="col s12" ng-controller="PendingImagesController">Test 1</div>
+            <div id="reviewedImages" class="col s12" ng-controller="ReviewedImagesController">Test 2</div>
+        </div>
+    </div>
+</div>
+<!-- Modal Structure -->
+<div id="imageUploadModal" class="modal bottom-sheet" ng-controller="ImageUploadController">
+    <div class="modal-content">
+        <h5>Upload Your Image</h5>
+        <div class="row">
+            <div class="input-field col s12">
+                <input id="imagetags" type="text" class="validate" ng-model="imageUpload.imagetags">
+                <label for="imagetags">Image Tags</label>
+            </div>
+        </div>
+        <div class="file-field input-field">
+            <div class="btn">
+                <span>File</span>
+                <input id="imagefilepath" type="file" ng-model="imageUpload.imagefilepath" ng-change="fileSelected()">
+            </div>
+            <div class="file-path-wrapper">
+                <input id="imageFileName" class="file-path validate" type="text" ng-model="imageUpload.imageFileName">
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+        <a href="#!" class="waves-effect waves-light btn" ng-click="uploadFileToUrl()">Upload</a>
+    </div>
+</div>
+<script>
+    /* Init Scripts */
+    $(".button-collapse").sideNav();
+    $('.modal').modal();
+</script>
+</body>
+</html>
