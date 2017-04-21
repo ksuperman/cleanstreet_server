@@ -103,3 +103,8 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
+/images/img/
+/images/temp/
+/annotations.json
+/images.json
+/finalTrainingJSON.json
