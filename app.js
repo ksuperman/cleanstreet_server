@@ -8,10 +8,12 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var users = require('./routes/users');
 var images = require('./routes/images');
+
 var tools = require('./routes/tools');
 mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/clean_street');
-
+var producer = require('./routes/producer');
+var consumerGroup = require('./routes/ConsumerGroup');
 var app = express();
 
 // view engine setup
