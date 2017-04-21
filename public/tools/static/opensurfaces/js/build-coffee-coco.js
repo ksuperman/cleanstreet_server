@@ -127,6 +127,7 @@ ControllerState = (function () {
         this.saved_point = null;
     }
 
+    /* Submit Handler Function */
     ControllerState.prototype.get_submit_data = function () {
         var p, points_scaled, poly, results, results_list, time_active_ms, time_ms, _i, _j, _len, _len1, _ref, _ref1, polys = [];
         results_list = [];

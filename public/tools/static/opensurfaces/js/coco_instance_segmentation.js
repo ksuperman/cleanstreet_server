@@ -7,7 +7,7 @@ function Ctrler() {
     this.im = new Image();
     // use cat icon for demo
     var cat_id = 17;
-    this.im.src = 'static/img/categories/' + cat_id + '.png';
+    this.im.src = '/tools/static/img/categories/' + cat_id + '.png';
     this.zoomLevel = 0;
 }
 
@@ -131,36 +131,47 @@ Ctrler.prototype.submitNoObj = function () {
 }
 
 Ctrler.prototype.submit_form = function (data_callback) {
-    var data, resultInstanceArray = [],resultInstance, imageHeight, imageWidth, resultObject, i, image_id, image_annotations_polygons, image_annotations_polygon, j, boundBoxPolyArray, bbRegion,
-        result = function () {
-            return {
-                "area": 0,
-                "bbox": [],
-                "category_id": 0,
-                "id": 1,
-                "image_id": 0,
-                "iscrowd": 0,
-                "segmentation": []
-            }
-        };
+    var data, resultInstanceArray = [], scaledResultInstanceArray = [],
+        resultInstance, imageHeight, imageWidth, resultObject, i, image_id,
+        image_annotations_polygons, image_annotations_polygon, j, boundBoxPolyArray,
+        bbRegion, result, requestPayload, requestPayloadInstance, scaledResultInstance;
+
+    result = function () {
+        var categoryId = $('#annotationClass').val() || 0;
+        return {
+            "area": 0,
+            "bbox": [],
+            "category_id": parseInt(categoryId),
+            //"id": 1,
+            "image_id": parseInt(window.image.id),
+            "iscrowd": 0,
+            "segmentation": []
+        }
+    };
+
+    requestPayload = function (annotations, annotations_scaled) {
+        return {
+            "annotations": annotations || [],
+            "annotations_scaled": annotations_scaled || [],
+            "image_id": parseInt(window.image.id)
+        }
+    };
 
     if (!mt_submit_ready) {
         return;
     }
 
-    //window.show_modal_loading("Submitting...", 0);
-
     data = data_callback();
 
-    /*data = $.extend(true, {
-     screen_width: screen.width,
-     screen_height: screen.height,
-     time_load_ms: window.time_load_ms
-     }, data);*/
+    data = $.extend(true, {
+        screen_width: screen.width,
+        screen_height: screen.height,
+        time_load_ms: window.time_load_ms
+    }, data);
 
     imageHeight = window.image.height;
     imageWidth = window.image.width;
-    resultObject = data.resultsObject;
+    resultObject = $.extend({}, data.resultsObject);
 
     for (image_id in resultObject) {
         /* Multiple Polygons Annotations for Image */
@@ -168,7 +179,12 @@ Ctrler.prototype.submit_form = function (data_callback) {
         for (i = 0; i < image_annotations_polygons.length; i++) {
             /* Repeat Each Polygon Annotations */
             resultInstance = new result();
+            scaledResultInstance = new result();
+
             image_annotations_polygon = image_annotations_polygons[i];
+
+            /* Create a Result Array of Scaled Annotations Generated */
+            scaledResultInstance.segmentation.push($.extend({}, image_annotations_polygon));
 
             /* Draw Bounding Boxes For Reference */
             boundBoxPolyArray = [getbboxCoordinates(convertPolyArrayToPolygonObject(image_annotations_polygon))];
@@ -192,10 +208,29 @@ Ctrler.prototype.submit_form = function (data_callback) {
             /* Append Segmentation Box to Result */
             resultInstance.segmentation.push(image_annotations_polygon);
 
+            /* Create a Result Array of Annotations Generated */
             resultInstanceArray.push(resultInstance);
+            scaledResultInstanceArray.push(scaledResultInstance);
         }
     }
-    console.log(JSON.stringify(resultInstanceArray),resultInstanceArray);
+
+    /* Create a Request Payload for the Server */
+    requestPayloadInstance = new requestPayload(resultInstanceArray, scaledResultInstanceArray);
+
+    console.log('requestPayloadInstance', requestPayloadInstance);
+
+    /* Insert the Data into the Server Data Store */
+    $.ajax({
+        url: '/tools/uploadImageAnnotations',
+        type: 'POST',
+        dataType: 'json',
+        data: requestPayloadInstance
+    }).done(function (data) {
+        console.log('done', data);
+        Materialize.toast('Annotation are now saved to server!', 3000, '', function () {
+            window.location.href = '/tools/annotationHub'
+        });
+    });
 };
 
 Ctrler.prototype.addListener = function () {
@@ -213,7 +248,6 @@ Ctrler.prototype.addListener = function () {
     $('#btn-move').bind('click', function (e) {
         ctrler.centerIcon();
         return stop_event(e);
-        //return stop_event(ev);
     });
     $(document).keydown(function (ev) {
         if (ev.keyCode == 77 || ev.keyCode == 109) {
@@ -233,10 +267,11 @@ Ctrler.prototype.addListener = function () {
             }, 100);
         }
     });
-}
+};
+
 // polygonal comparison
 function isPointInPoly(poly, pt) {
-    nvert = poly.length
+    nvert = poly.length;
     var c = false;
     for (i = 0, j = nvert - 1; i < nvert; j = i++) {
         if ((poly[i]['y'] > pt['y'] ) != (poly[j]['y'] > pt['y']) &&

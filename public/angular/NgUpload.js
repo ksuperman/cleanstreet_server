@@ -20,14 +20,11 @@ myApp.service('fileUpload', ['$http', function ($http) {
         var fd = new FormData();
         fd.append('image', file);
         fd.append('imageContent', $scope.image);
-        console.log(file);
+        console.log($scope.image);
         var request = {
             method: 'POST',
             url: uploadUrl,
-            data: $scope.image,
-            headers: {
-                'Content-Type': undefined
-            }
+            data: {"image" :$scope.image}
         };
 
         $http(request)
