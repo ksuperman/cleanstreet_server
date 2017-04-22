@@ -13,14 +13,18 @@ mkdir data/val2014
 cp ./temp/instances_train2014.json data/annotations/instances_train2014.json
 cp ./temp/instances_train2014.json data/annotations/instances_val2014.json
 
-cp -a ./images/img/ ./data/train2014
-cp -a ./images/img/ ./data/val2014
+cp -a ./images/img/. ./data/train2014
+cp -a ./images/img/. ./data/val2014
 
 rm data.tar.xz
 
 if [ "$1" == "sendToServer" ]; then echo $1; fi
 
 tar cJf data.tar.xz ./data
+
+rm -r data
+
+rm -r temp
 
 echo "File Package Complete"
 echo "============================"

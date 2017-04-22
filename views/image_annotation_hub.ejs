@@ -184,9 +184,15 @@
     <div class="modal-content">
         <h5>Upload Your Image</h5>
         <div class="row">
-            <div class="input-field col s12">
+            <div class="input-field col s8">
                 <input id="imagetags" type="text" class="validate" ng-model="imageUpload.imagetags">
                 <label for="imagetags">Image Tags</label>
+            </div>
+            <div class="input-field col s4">
+                <select id="imageType" class="selectpicker btn  blue darken-1" ng-model="imageUpload.imageType">
+                    <option value="training" default>Training</option>
+                    <option value="validate">Validation</option>
+                </select>
             </div>
         </div>
         <div class="file-field input-field">

@@ -26,7 +26,8 @@ angular.module('PendingImagesController', ['datatables'])//, 'datatables.buttons
             .withOption('serverSide', true)
             .withOption('responsive', true)
             .withPaginationType('full_numbers')
-            .withOption('rowCallback', rowClickCallback);
+            .withOption('rowCallback', rowClickCallback)
+            .withOption('order', [4, 'desc']);
 
         self.dtColumns = [
             DTColumnBuilder.newColumn('idString').withTitle('Image Id').withOption('width', '40px'),
@@ -37,11 +38,12 @@ angular.module('PendingImagesController', ['datatables'])//, 'datatables.buttons
                 return '<b>' + full.width + 'x' + full.height + '</b>';
             }).notSortable(),
             DTColumnBuilder.newColumn('file_name').withTitle('File Name').withOption('width', '90px'),
-            DTColumnBuilder.newColumn('date_captured').withTitle('Date Captured').withOption('width', '90px').withOption('searchable', false).notSortable().renderWith(function (data, type, full) {
+            DTColumnBuilder.newColumn('date_captured').withTitle('Date Captured').withOption('width', '90px').withOption('searchable', false).renderWith(function (data, type, full) {
                 return new Date(full.date_captured).toDateString();
             }),
             DTColumnBuilder.newColumn('width').withTitle('Width').withOption('width', '90px').withOption('searchable', false).notSortable().notVisible(),
-            DTColumnBuilder.newColumn('height').withTitle('Height').withOption('width', '90px').withOption('searchable', false).notSortable().notVisible()
+            DTColumnBuilder.newColumn('height').withTitle('Height').withOption('width', '90px').withOption('searchable', false).notSortable().notVisible(),
+            DTColumnBuilder.newColumn('image_type').withTitle('Image Type').withOption('width', '90px').notVisible()
             /* POC for Image EXIF Extraction */
             /*DTColumnBuilder.newColumn('image').withTitle('image').withOption('width', '90px').withOption('searchable', false).notSortable().renderWith(function (data, type, full) {
                 var exifObj = piexif.load(full.image);
