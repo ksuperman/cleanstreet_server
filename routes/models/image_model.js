@@ -18,7 +18,7 @@ var imageSchema = new mongoose.Schema({
     server_image_url: {type: String, index: true},
     status: {type: String, index: true, default: 'N'},
     cocoMetaData: 'Mixed',
-    image_type: {type: String, index: true, default: 'T'}
+    image_type: {type: String, index: true, default: 'training'}
 });
 
 imageSchema.plugin(autoIncrement.plugin, {model: 'image', field: 'id'});
