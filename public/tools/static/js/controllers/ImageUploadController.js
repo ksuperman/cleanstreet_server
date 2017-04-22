@@ -3,6 +3,8 @@ angular.module('ImageUploadController', [])
 
         $scope.imageUpload = {};
 
+        $scope.imageUpload.imageType = 'training';
+
         $scope.uploadFileToUrl = function () {
             var imageFile = document.getElementById('imagefilepath').files[0],
                 reader = new FileReader(),
@@ -11,6 +13,7 @@ angular.module('ImageUploadController', [])
                 exifObj;
 
             data.imagetags = $scope.imageUpload.imagetags;
+            data.imageType = $scope.imageUpload.imageType;
 
             reader.onloadend = function (e) {
                 data.image = e.target.result;

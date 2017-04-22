@@ -46,6 +46,7 @@ router.post('/uploadImage', function (req, res, next) {
     var imageObject,
         imageTags,
         imageDataURI,
+        imageType,
         imageId,
         imagebase64Data,
         tempImageFileName = path.join(__dirname, "..", "images", "temp", "temp" + new Date().getTime() + '.jpg'),
@@ -59,14 +60,15 @@ router.post('/uploadImage', function (req, res, next) {
 
     try {
         if (req.body && req.body.image) {
-
+            imageType = req.body.imageType;
             imageDataURI = req.body.image;
             imageTags = (req.body.imagetags) ? req.body.imagetags.split(',') : [];
             imageObject = new image_model({
                 "flickr_url": "http://farm4.staticflickr.com/3153/2970773875_164f0c0b83_z.jpg",
                 "license": 1,
                 "imageTags": imageTags,
-                image: imageDataURI
+                "image": imageDataURI,
+                "image_type": imageType
             });
             imagebase64Data = imageDataURI.replace(/^data:([A-Za-z-+\/]+);base64,/, "");
 
@@ -104,8 +106,15 @@ router.post('/uploadImage', function (req, res, next) {
                                         /* Update the Model with Next Image Id */
                                         imageObject.idString = imageId.toString();
                                         imageObject.coco_url = "http://mscoco.org/images/" + imageId;
-                                        imageObject.file_name = "COCO_train2014_" + padImageId(imageId) + ".jpg";
-                                        imageObject.server_image_url = "/img/" + imageObject.file_name;
+                                        if (imageType === "training") {
+                                            imageObject.file_name = "COCO_train2014_" + padImageId(imageId) + ".jpg";
+                                            imageObject.server_image_url = "/img/training/" + imageObject.file_name;
+                                            finalImageName = path.join(__dirname, "..", "images", "img", "training", imageObject.file_name);
+                                        } else {
+                                            imageObject.file_name = "COCO_val2014_" + padImageId(imageId) + ".jpg";
+                                            imageObject.server_image_url = "/img/validation/" + imageObject.file_name;
+                                            finalImageName = path.join(__dirname, "..", "images", "img", "validation", imageObject.file_name);
+                                        }
                                         imageObject.width = image.width();
                                         imageObject.height = image.height();
                                         date = date.getFullYear() + '-' + padDate(date.getMonth()) + '-' + padDate(date.getDate()) + ' ' + padDate(date.getHours()) + ':' + padDate(date.getMinutes()) + ':' + padDate(date.getSeconds())
@@ -118,7 +127,6 @@ router.post('/uploadImage', function (req, res, next) {
                                             } else {
                                                 console.log('Success - 4');
                                                 /* Save Image on Disk */
-                                                finalImageName = path.join(__dirname, "..", "images", "img", imageObject.file_name);
                                                 image.writeFile(finalImageName, function (err) {
                                                     if (err) {
                                                         sendError({error: err.toString()});
@@ -265,16 +273,21 @@ router.post('/getTrainingJSONFile', function (req, res) {
         exportScriptParams,
         packageScriptParams,
         child,
-        finalTrainingJSON;
+        finalTrainingJSON,
+        finalValidationJSON;
 
     spawn = require('child_process').spawnSync;
     mongodbServerURL = config_file.mongodbServerURL;
     exportScriptParams = ['createTrainingFile.sh', mongodbServerURL];
     child = spawn('sh', exportScriptParams, {cwd: path.join(__dirname, "..")});
+
     finalTrainingJSON = require('./coco_basic_file.json');
+    finalValidationJSON = require('./coco_basic_file.json');
+
     console.log('stdout here: \n' + child.stdout);
     console.log('stderr here: \n' + child.stderr);
     console.log('status here: \n' + child.status);
+
     if (child.status === 0) {
         bfj.read(path.join(__dirname, "..", 'temp', 'images.json')).then(function (imagesData) {
             console.log("Images Read Completed");
