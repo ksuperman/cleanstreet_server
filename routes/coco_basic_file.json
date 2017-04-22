@@ -21,11 +21,6 @@
       "id":1,
       "name":"street",
       "supercategory":"phase1"
-    },
-    {
-      "id":2,
-      "name":"curb",
-      "supercategory":"phase1"
     }
   ]
 }

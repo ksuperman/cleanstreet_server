@@ -186,6 +186,8 @@ Ctrler.prototype.submit_form = function (data_callback) {
             /* Create a Result Array of Scaled Annotations Generated */
             scaledResultInstance.segmentation.push($.extend({}, image_annotations_polygon));
 
+            scaledResultInstance.image_type = imageObject.image_type;
+
             /* Draw Bounding Boxes For Reference */
             boundBoxPolyArray = [getbboxCoordinates(convertPolyArrayToPolygonObject(image_annotations_polygon))];
             drawBoundingBox(boundBoxPolyArray);
@@ -207,6 +209,9 @@ Ctrler.prototype.submit_form = function (data_callback) {
 
             /* Append Segmentation Box to Result */
             resultInstance.segmentation.push(image_annotations_polygon);
+
+            /* Append the Type of the Image to the Annotations */
+            resultInstance.image_type = imageObject.image_type;
 
             /* Create a Result Array of Annotations Generated */
             resultInstanceArray.push(resultInstance);
