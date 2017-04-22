@@ -259,31 +259,50 @@ router.post('/getScaledImageAnnotations', function (req, res) {
 });
 
 router.post('/getTrainingJSONFile', function (req, res) {
+    /* Execute Export Script */
+    var spawn,
+        mongodbServerURL,
+        exportScriptParams,
+        packageScriptParams,
+        child,
+        finalTrainingJSON;
 
-    var spawn = require('child_process').spawnSync,
-        child = spawn('sh', ['createTrainingFile.sh', '/Users/rakshithk/WebstormProjects/cleanstreets_server/']),
-        finalTrainingJSON = require('./coco_basic_file.json');
-
+    spawn = require('child_process').spawnSync;
+    mongodbServerURL = config_file.mongodbServerURL;
+    exportScriptParams = ['createTrainingFile.sh', mongodbServerURL];
+    child = spawn('sh', exportScriptParams, {cwd: path.join(__dirname, "..")});
+    finalTrainingJSON = require('./coco_basic_file.json');
     console.log('stdout here: \n' + child.stdout);
     console.log('stderr here: \n' + child.stderr);
     console.log('status here: \n' + child.status);
-
     if (child.status === 0) {
-        bfj.read('images.json').then(function (imagesData) {
+        bfj.read(path.join(__dirname, "..", 'temp', 'images.json')).then(function (imagesData) {
             console.log("Images Read Completed");
             finalTrainingJSON.images = imagesData;
-            bfj.read('annotations.json').then(function (annotationdata) {
+            bfj.read(path.join(__dirname, "..", 'temp', 'annotations.json')).then(function (annotationdata) {
                 console.log("Annotations Read Completed");
                 finalTrainingJSON.annotations = annotationdata;
-                bfj.write('finalTrainingJSON.json', finalTrainingJSON).then(function () {
+                bfj.write(path.join(__dirname, "..", 'temp', 'instances_train2014.json'), finalTrainingJSON).then(function () {
                     console.log("finalTrainingJSON Written Completed");
+                    /* Execute Package Script */
+                    packageScriptParams = ['packageTrainingFile.sh'];
+                    if (config_file.env_type === "server") {
+                        packageScriptParams.push('sendToServer');
+                    } else {
+                        packageScriptParams.push('sendToServer');
+                    }
+                    spawn = require('child_process').spawnSync;
+                    child = spawn('sh', packageScriptParams, {cwd: path.join(__dirname, "..")});
+                    console.log('stdout here: \n' + child.stdout);
+                    console.log('stderr here: \n' + child.stderr);
+                    console.log('status here: \n' + child.status);
                     sendSuccess({response: 'Success'});
                 });
             }).catch(function (error) {
-                console.log("Annotations Read FALIED", error);
+                console.log("Annotations Read FAILED", error);
             });
         }).catch(function (error) {
-            console.log("Images Read FALIED", error);
+            console.log("Images Read FAILED", error);
             sendError({error: JSON.stringify(child.stderr)});
         });
     } else {
