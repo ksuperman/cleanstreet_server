@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "server": "env_type=server forever start ./bin/www"
+    "server:start": "env_type=server forever start ./bin/www",
+    "server:stop": "forever stopall"
   },
   "dependencies": {
     "bfj": "^3.0.0",
