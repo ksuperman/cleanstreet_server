@@ -305,20 +305,20 @@ router.post('/getTrainingJSONFile', function (req, res) {
                             console.log("instances_train2014 Written Completed");
                             bfj.write(path.join(__dirname, "..", 'temp', 'instances_val2014.json'), finalValidationJSON).then(function () {
                                 console.log("instances_val2014 Written Completed");
+                                /* Execute Package Script */
+                                packageScriptParams = ['packageTrainingFile.sh'];
+                                if (config_file.env_type === "server") {
+                                    packageScriptParams.push('sendToServer');
+                                } else {
+                                    packageScriptParams.push('sendToServer');
+                                }
+                                spawn = require('child_process').spawnSync;
+                                child = spawn('sh', packageScriptParams, {cwd: path.join(__dirname, "..")});
+                                console.log('stdout here: \n' + child.stdout);
+                                console.log('stderr here: \n' + child.stderr);
+                                console.log('status here: \n' + child.status);
+                                sendSuccess({response: 'Success'});
                             });
-                            /* Execute Package Script */
-                            packageScriptParams = ['packageTrainingFile.sh'];
-                            if (config_file.env_type === "server") {
-                                packageScriptParams.push('sendToServer');
-                            } else {
-                                packageScriptParams.push('sendToServer');
-                            }
-                            spawn = require('child_process').spawnSync;
-                            child = spawn('sh', packageScriptParams, {cwd: path.join(__dirname, "..")});
-                            console.log('stdout here: \n' + child.stdout);
-                            console.log('stderr here: \n' + child.stderr);
-                            console.log('status here: \n' + child.status);
-                            sendSuccess({response: 'Success'});
                         });
                     }).catch(function (error) {
                         console.log("validateAnnotations Read FAILED", error);
