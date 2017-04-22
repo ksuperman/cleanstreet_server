@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var connection = mongoose.createConnection("mongodb://localhost/imageScaledAnnotationCounter");
+var connection = mongoose.createConnection("mongodb://" + config_file.mongodbServerURL + "/imageScaledAnnotationCounter");
 var autoIncrement = require('mongoose-auto-increment');
 autoIncrement.initialize(connection);
 

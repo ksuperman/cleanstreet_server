@@ -1,17 +1,18 @@
+config_file = require('./config/configuration');
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+mongoose = require('mongoose');
+mongoose.connect('mongodb://' + config_file.mongodbServerURL + '/clean_street');
 
+/* Routes*/
 var index = require('./routes/index');
 var users = require('./routes/users');
 var images = require('./routes/images');
-
 var tools = require('./routes/tools');
-mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/clean_street');
 var producer = require('./routes/producer');
 var consumerGroup = require('./routes/ConsumerGroup');
 var app = express();
@@ -21,7 +22,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'public', 'images','favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
