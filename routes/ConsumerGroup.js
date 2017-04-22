@@ -6,7 +6,7 @@ var kafka = require('kafka-node');
 var ConsumerGroup = kafka.ConsumerGroup;
 
 var consumerOptions = {
-    host: 'localhost:2181',
+    host: config_file.zookeeperServerURL,
     groupId: 'kafka-node-group',
     autoCommit : true,
     sessionTimeout: 15000,

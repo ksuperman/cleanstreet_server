@@ -6,7 +6,7 @@ var kafka = require('kafka-node');
 var Producer = kafka.HighLevelProducer;
 var Client = kafka.Client;
 var Promise = require('promise');
-var client = new Client('localhost:2181');
+var client = new Client(config_file.zookeeperServerURL);
 
 //var argv = require('optimist').argv;
 var producer = new Producer(client, { requireAcks: 1,  partitionerType: 2});

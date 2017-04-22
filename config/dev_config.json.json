@@ -1,4 +1,5 @@
 {
+    "env_type": "dev",
     "mongodbServerURL": "localhost:27017",
     "zookeeperServerURL": "localhost:2181",
     "kafkaServerURL": "localhost:9092"
