@@ -7,7 +7,8 @@ angular.module('ImageUploadController', [])
             var imageFile = document.getElementById('imagefilepath').files[0],
                 reader = new FileReader(),
                 data = {},
-                headers = {'Content-Type': 'application/json'};
+                headers = {'Content-Type': 'application/json'},
+                exifObj;
 
             data.imagetags = $scope.imageUpload.imagetags;
 
@@ -16,9 +17,9 @@ angular.module('ImageUploadController', [])
                 /* POC For Image EXIF Extraction */
                 var image = new Image();
                 image.onload = function () {
-                   var test =  get_exif_data(data.image);
-                   console.log(test);
-                    var exifObj = piexif.load(data.image);
+                    /* Get Library from https://gist.github.com/ksuperman/70e9dae55de3d810de0f7e1deb35d707 */
+                    /* get_exif_data(data.image); */
+                    exifObj = piexif.load(data.image);
                     for (var ifd in exifObj) {
                         if (ifd == "thumbnail") {
                             continue;
@@ -40,7 +41,7 @@ angular.module('ImageUploadController', [])
             function uploadHandler(response) {
                 console.log(response);
                 $('#closeUploadPrompt').click();
-                Materialize.toast('Image Successfully Uploaded to the Server!', 3000, '', function () {
+                Materialize.toast('Image Successfully Uploaded to the Server!', 1000, '', function () {
                     window.location.href = '/tools/annotationHub'
                 });
             }
