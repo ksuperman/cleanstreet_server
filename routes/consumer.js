@@ -8,7 +8,7 @@ var Client = kafka.Client;
 var topic =  'test';
 var Promise = require('promise');
 
-var client = new Client('localhost:2181');
+var client = new Client(config_file.zookeeperServerURL);
 var topics1 = [
     {topic: topic, partition: 0}
 ];
