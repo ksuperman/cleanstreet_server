@@ -10,6 +10,7 @@ var path = require('path');
 var datatablesQuery = require('datatables-query');
 var bfj = require('bfj');
 
+
 /* GET Annotation Hub Page */
 router.get('/annotationHub', function (req, res, next) {
     res.render('image_annotation_hub', {title: 'Clean Streets Framework'});
