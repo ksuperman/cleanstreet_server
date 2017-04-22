@@ -281,8 +281,8 @@ router.post('/getTrainingJSONFile', function (req, res) {
     exportScriptParams = ['createTrainingFile.sh', mongodbServerURL];
     child = spawn('sh', exportScriptParams, {cwd: path.join(__dirname, "..")});
 
-    finalTrainingJSON = require('./coco_basic_file.json');
-    finalValidationJSON = require('./coco_basic_file.json');
+    finalTrainingJSON = JSON.parse(JSON.stringify(require('./coco_basic_file.json')));
+    finalValidationJSON = JSON.parse(JSON.stringify(require('./coco_basic_file.json')));
 
     console.log('stdout here: \n' + child.stdout);
     console.log('stderr here: \n' + child.stderr);
@@ -292,27 +292,42 @@ router.post('/getTrainingJSONFile', function (req, res) {
         bfj.read(path.join(__dirname, "..", 'temp', 'images.json')).then(function (imagesData) {
             console.log("Images Read Completed");
             finalTrainingJSON.images = imagesData;
-            bfj.read(path.join(__dirname, "..", 'temp', 'annotations.json')).then(function (annotationdata) {
-                console.log("Annotations Read Completed");
-                finalTrainingJSON.annotations = annotationdata;
-                bfj.write(path.join(__dirname, "..", 'temp', 'instances_train2014.json'), finalTrainingJSON).then(function () {
-                    console.log("finalTrainingJSON Written Completed");
-                    /* Execute Package Script */
-                    packageScriptParams = ['packageTrainingFile.sh'];
-                    if (config_file.env_type === "server") {
-                        packageScriptParams.push('sendToServer');
-                    } else {
-                        packageScriptParams.push('sendToServer');
-                    }
-                    spawn = require('child_process').spawnSync;
-                    child = spawn('sh', packageScriptParams, {cwd: path.join(__dirname, "..")});
-                    console.log('stdout here: \n' + child.stdout);
-                    console.log('stderr here: \n' + child.stderr);
-                    console.log('status here: \n' + child.status);
-                    sendSuccess({response: 'Success'});
+            bfj.read(path.join(__dirname, "..", 'temp', 'validationImages.json')).then(function (validationImages) {
+                console.log("validationImages Read Completed");
+                finalValidationJSON.images = validationImages;
+                bfj.read(path.join(__dirname, "..", 'temp', 'annotations.json')).then(function (annotationdata) {
+                    console.log("Annotations Read Completed");
+                    finalTrainingJSON.annotations = annotationdata;
+                    bfj.read(path.join(__dirname, "..", 'temp', 'validateAnnotations.json')).then(function (validateAnnotations) {
+                        console.log("validateAnnotations Read Completed");
+                        finalValidationJSON.annotations = validateAnnotations;
+                        bfj.write(path.join(__dirname, "..", 'temp', 'instances_train2014.json'), finalTrainingJSON).then(function () {
+                            console.log("instances_train2014 Written Completed");
+                            bfj.write(path.join(__dirname, "..", 'temp', 'instances_val2014.json'), finalValidationJSON).then(function () {
+                                console.log("instances_val2014 Written Completed");
+                            });
+                            /* Execute Package Script */
+                            packageScriptParams = ['packageTrainingFile.sh'];
+                            if (config_file.env_type === "server") {
+                                packageScriptParams.push('sendToServer');
+                            } else {
+                                packageScriptParams.push('sendToServer');
+                            }
+                            spawn = require('child_process').spawnSync;
+                            child = spawn('sh', packageScriptParams, {cwd: path.join(__dirname, "..")});
+                            console.log('stdout here: \n' + child.stdout);
+                            console.log('stderr here: \n' + child.stderr);
+                            console.log('status here: \n' + child.status);
+                            sendSuccess({response: 'Success'});
+                        });
+                    }).catch(function (error) {
+                        console.log("validateAnnotations Read FAILED", error);
+                    });
+                }).catch(function (error) {
+                    console.log("Annotations Read FAILED", error);
                 });
             }).catch(function (error) {
-                console.log("Annotations Read FAILED", error);
+                console.log("validationImages Read FAILED", error);
             });
         }).catch(function (error) {
             console.log("Images Read FAILED", error);
