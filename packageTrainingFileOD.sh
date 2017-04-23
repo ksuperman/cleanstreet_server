@@ -16,11 +16,11 @@ cp -a ./temp/instances_train2014.json ./data/annotations/instances_train2014.jso
 cp -a ./images/img/training/. ./data/train2014/
 cp -a ./images/img/validation/. ./data/val2014/
 
-# rm data.tar.xz
+# rm data_od.tar.xz
 
 if [ "$1" == "sendToServer" ]; then echo $1; fi
 
-tar cJf data.tar.xz ./data
+tar cJf data_od.tar.xz ./data
 
 rm -r ./data
 
