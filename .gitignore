@@ -103,8 +103,11 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
-/images/img/
-/images/temp/
+/images/obj/training/*
+/images/obj/validation/*
+/images/img/training/*
+/images/img/validation/*
+/images/temp/*
 /temp/
 /data/
 /data.tar.xz

@@ -1,0 +1,19 @@
+angular.module('HeaderController', [])
+    .controller("HeaderController", function ($scope, serverUtilities) {
+        $('#imageUploadModal').modal();
+        $(".button-collapse").sideNav();
+
+        $scope.createTrainingFile = function () {
+            var data = {},
+                headers = {'Content-Type': 'application/json'};
+
+            Materialize.toast('Your Request for Training Data JSON has been Received by the Server, You\'ll be notified when the Data is Generated in the Server.', 8000, '', function () {});
+
+            serverUtilities.uploadDataToServer('/tools/getTrainingJSONFileOD', 'POST', data, headers, handledJSONFIleGenerationResponse, handledJSONFIleGenerationResponse);
+
+        };
+
+        function handledJSONFIleGenerationResponse() {
+            Materialize.toast('The Training JSON File has been Exported at the server file system!', 8000, '', function () {});
+        }
+    });
