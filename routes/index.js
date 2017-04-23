@@ -29,7 +29,9 @@ router.post('/uploadImageToPipeline', function (req, res, next) {
         cocoImageAttribName = ["id", "width", "height", "file_name", "license", "flickr_url", "coco_url", "date_captured"],
         date = new Date(),
         exifObj,
-        exifbytes;
+        exifbytes,
+        bufferedImageDataURI,
+        bufferedImageDataURIBase64;
 
     try {
         if (req.body && req.body.image) {
@@ -44,11 +46,6 @@ router.post('/uploadImageToPipeline', function (req, res, next) {
                     console.log('Error - 3');
                     sendError({error: 'Image Object Not Found in the Request'});
                 } else {
-
-                    /* Adding Exif Tags to Image */
-                    exifObj = new EXIF(nextImageId, "Clean Streets");
-                    exifbytes = piexif.dump(exifObj);
-                    imageDataURI  = piexif.insert(exifbytes, imageDataURI);
                     imagebase64Data = imageDataURI.replace(/^data:([A-Za-z-+\/]+);base64,/, "");
 
                     /* Write Image to File System as Temp File */
@@ -95,26 +92,29 @@ router.post('/uploadImageToPipeline', function (req, res, next) {
                                             } else {
                                                 console.log('Success - 4');
                                                 /* Save Image on Disk */
-                                                exifObj = new EXIF();
-                                                exifbytes = piexif.dump(exifObj);
-
-                                                image.writeFile(finalImageName, function (err) {
+                                                image.toBuffer('jpeg', {}, function(err, buffer){
                                                     if (err) {
+                                                        console.log('Error - 5');
                                                         sendError({error: err.toString()});
                                                     } else {
-
-                                                        exifObj = piexif.load(imageDataURI);
-                                                        for (var ifd in exifObj) {
-                                                            if (ifd == "thumbnail") {
-                                                                continue;
+                                                        console.log('Success - 5');
+                                                        bufferedImageDataURI = 'data:image/jpeg;base64,' + buffer.toString('base64');
+                                                        /* Adding Exif Tags to Image */
+                                                        exifObj = new EXIF(nextImageId, "Clean Streets");
+                                                        exifbytes = piexif.dump(exifObj);
+                                                        bufferedImageDataURI  = piexif.insert(exifbytes, bufferedImageDataURI);
+                                                        bufferedImageDataURIBase64 = bufferedImageDataURI.replace(/^data:([A-Za-z-+\/]+);base64,/, "");
+                                                        fsPath.writeFile(finalImageName, bufferedImageDataURIBase64, 'base64', function (err) {
+                                                            if (err) {
+                                                                console.log('Error - 6');
+                                                                sendError({error: err.toString()});
+                                                            } else {
+                                                                console.log('Success - 6');
+                                                                console.log(bufferedImageDataURI);
+                                                                /* ---------------- PARTEEK ----------------- ADD YOUR CHANGES HERE TO PUSH IMAGE TO KAKFA HERE */
+                                                                sendSuccess({response: 'Success'});
                                                             }
-                                                            console.log("-" + ifd);
-                                                            for (var tag in exifObj[ifd]) {
-                                                                console.log("  " + piexif.TAGS[ifd][tag]["name"] + ":" + exifObj[ifd][tag]);
-                                                            }
-                                                        }
-                                                        /* ---------------- PARTEEK ----------------- ADD YOUR CHANGES HERE TO PUSH IMAGE TO KAKFA HERE */
-                                                        sendSuccess({response: 'Success'});
+                                                        });
                                                     }
                                                 });
                                             }
