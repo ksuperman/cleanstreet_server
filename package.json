@@ -17,13 +17,14 @@
     "ejs": "~2.5.5",
     "express": "~4.14.1",
     "fs-path": "0.0.23",
+    "kafka-node": "^1.6.0",
     "lwip": "0.0.9",
     "mongodb": "^2.2.25",
     "mongoose": "^4.7.1",
     "mongoose-auto-increment": "^5.0.1",
-    "kafka-node": "^1.6.0",
     "morgan": "~1.7.0",
     "node-sass-middleware": "0.9.8",
+    "piexifjs": "^1.0.3",
     "promise": "^7.1.1",
     "serve-favicon": "~2.3.2"
   }
