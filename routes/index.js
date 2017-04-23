@@ -110,7 +110,6 @@ router.post('/uploadImageToPipeline', function (req, res, next) {
                                                                 sendError({error: err.toString()});
                                                             } else {
                                                                 console.log('Success - 6');
-                                                                console.log(bufferedImageDataURI);
                                                                 /* ---------------- PARTEEK ----------------- ADD YOUR CHANGES HERE TO PUSH IMAGE TO KAKFA HERE */
                                                                 sendSuccess({response: 'Success'});
                                                             }
