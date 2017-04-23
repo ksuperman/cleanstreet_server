@@ -44,16 +44,15 @@
     <script src="/bower_components/angular-datatables/dist/angular-datatables.js"></script>
     <script src="/bower_components/angular-datatables/dist/plugins/bootstrap/angular-datatables.bootstrap.js"></script>
     <script src="/bower_components/angular-datatables/dist/plugins/buttons/angular-datatables.buttons.js"></script>
-    <!--<script src="/bower_components/exif-js/exif.js"></script>/* Get Library from https://gist.github.com/ksuperman/70e9dae55de3d810de0f7e1deb35d707 */-->
     <script src="/bower_components/piexifjs/piexif.js"></script>
 
     <!-- Angular Application Init -->
-    <script src="/tools/static/js/app.js"></script>
-    <script src="/tools/static/js/controllers/AnnotationHubContoller.js"></script>
-    <script src="/tools/static/js/controllers/HeaderController.js"></script>
-    <script src="/tools/static/js/controllers/PendingImagesController.js"></script>
-    <script src="/tools/static/js/controllers/ReviewedImagesController.js"></script>
-    <script src="/tools/static/js/controllers/ImageUploadController.js"></script>
+    <script src="/tools/static/js/appOD.js"></script>
+    <script src="/tools/static/js/controllers/AnnotationHubContollerOD.js"></script>
+    <script src="/tools/static/js/controllers/HeaderControllerOD.js"></script>
+    <script src="/tools/static/js/controllers/PendingImagesControllerOD.js"></script>
+    <script src="/tools/static/js/controllers/ReviewedImagesControllerOD.js"></script>
+    <script src="/tools/static/js/controllers/ImageUploadControllerOD.js"></script>
 
     <style>
         html {
@@ -131,11 +130,11 @@
         <a href="/tools/annotationHub" class="brand-logo"><i class="material-icons header-icon">dashboard</i>Clean Streets</a>
         <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li><a href="/tools/annotationHubOD"><i class="material-icons left">dashboard</i>Object Detection Hub</a></li>
+            <li><a href="/tools/annotationHub"><i class="material-icons left">dashboard</i>Annotation Hub</a></li>
             <li><a href="https://github.com/ksuperman/cleanstreet_server"><i class="material-icons left">code</i>Github</a></li>
         </ul>
         <ul class="side-nav" id="mobile-demo">
-            <li><a href="/tools/annotationHubOD"><i class="material-icons">dashboard</i>Object Detection Hub</a></li>
+            <li><a href="/tools/annotationHub"><i class="material-icons">dashboard</i>Annotation Hub</a></li>
             <li><a href="https://github.com/ksuperman/cleanstreet_server"><i class="material-icons">code</i>Github</a></li>
         </ul>
     </div>
@@ -156,7 +155,7 @@
 <div id='content-container'>
     <div id="mt-top-nohover">
         <div id="mt-instructions">
-            <h4>Clean Streets Image Annotation Tool</h4>
+            <h4>Clean Streets Object Detection Annotation Tool</h4>
         </div>
     </div>
     <div id="exTab1" class="nav-tabs" ng-controller="AnnotationHubController">
