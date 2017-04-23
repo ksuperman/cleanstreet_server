@@ -1,0 +1,26 @@
+{
+  "info":{
+    "contributor":"Microsoft COCO group",
+    "date_created":"2015-01-27 09:11:52.357475",
+    "description":"This is stable 1.0 version of the 2014 MS COCO dataset.",
+    "url":"http://mscoco.org",
+    "version":"1.0",
+    "year":2014
+  },
+  "images": [],
+  "annotations": [],
+  "licenses":[
+    {
+      "id":1,
+      "name":"Attribution-NonCommercial-ShareAlike License",
+      "url":"http://creativecommons.org/licenses/by-nc-sa/2.0/"
+    }
+  ],
+  "categories":[
+    {
+      "id":1,
+      "name":"litter",
+      "supercategory":"phase3"
+    }
+  ]
+}
