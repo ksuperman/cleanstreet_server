@@ -13,12 +13,12 @@ mkdir data/val2014
 cp -a ./temp/instances_val2014.json ./data/annotations/instances_val2014.json
 cp -a ./temp/instances_train2014.json ./data/annotations/instances_train2014.json
 
-cp -a ./images/img/training/. ./data/train2014/
-cp -a ./images/img/validation/. ./data/val2014/
+cp -a ./images/obj/training/. ./data/train2014/
+cp -a ./images/obj/validation/. ./data/val2014/
 
 # rm data_od.tar.xz
 
-if [ "$1" == "sendToServer" ]; then echo $1; fi
+#if [ "$1" == "sendToServer" ]; then echo $1; fi
 
 tar cJf data_od.tar.xz ./data
 
