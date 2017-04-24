@@ -5,6 +5,8 @@ var image_pipeline_model = require('./models/image_pipeline_model');
 var lwip = require('lwip');
 var piexif = require("piexifjs");
 var path = require('path');
+var producer = require('./producer');
+var message = require('./message');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -31,7 +33,8 @@ router.post('/uploadImageToPipeline', function (req, res, next) {
         exifObj,
         exifbytes,
         bufferedImageDataURI,
-        bufferedImageDataURIBase64;
+        bufferedImageDataURIBase64,
+        kafkamessage = [];
 
     try {
         if (req.body && req.body.image) {
@@ -111,7 +114,17 @@ router.post('/uploadImageToPipeline', function (req, res, next) {
                                                             } else {
                                                                 console.log('Success - 6');
                                                                 /* ---------------- PARTEEK ----------------- ADD YOUR CHANGES HERE TO PUSH IMAGE TO KAKFA HERE */
-                                                                sendSuccess({response: 'Success'});
+                                                                try {
+                                                                        kafkamessage.push(message.createMessage('keyed',"image", bufferedImageDataURI));
+                                                                        producer.sendMessage("Phase1Topicss",kafkamessage,0,0,function(result){
+                                                                            sendSuccess({response: 'Success'});
+                                                                        });
+
+                                                                }
+                                                                catch(error){
+                                                                    console.log('Error - 7');
+                                                                    sendError({error: error.toString()});
+                                                                }
                                                             }
                                                         });
                                                     }

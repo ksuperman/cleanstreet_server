@@ -20,7 +20,6 @@ myApp.service('fileUpload', ['$http', function ($http) {
         var fd = new FormData();
         fd.append('image', file);
         fd.append('imageContent', $scope.image);
-        console.log($scope.image);
         var request = {
             method: 'POST',
             url: uploadUrl,
@@ -58,7 +57,7 @@ myApp.controller('myCtrl', ['$scope', 'fileUpload', function($scope, fileUpload)
             console.log("calling you");
             $scope.image = e.target.result;
             $scope.imagePresent = true;
-            var uploadUrl = "/images/fileUpload";
+            var uploadUrl = "/uploadImageToPipeline";
             fileUpload.uploadFileToUrl($scope.myFile, uploadUrl, $scope);
         });
     };
