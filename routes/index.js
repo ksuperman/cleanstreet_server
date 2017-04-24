@@ -116,7 +116,7 @@ router.post('/uploadImageToPipeline', function (req, res, next) {
                                                                 /* ---------------- PARTEEK ----------------- ADD YOUR CHANGES HERE TO PUSH IMAGE TO KAKFA HERE */
                                                                 try {
                                                                         kafkamessage.push(message.createMessage('keyed',"image", bufferedImageDataURI));
-                                                                        producer.sendMessage("Phase1Topicss",kafkamessage,0,0,function(result){
+                                                                        producer.sendMessage("Phase1Topic",kafkamessage,0,0,function(result){
                                                                             sendSuccess({response: 'Success'});
                                                                         });
 
