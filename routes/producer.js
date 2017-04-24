@@ -62,8 +62,6 @@ var sendMessage = function(topic, messageArray, partition, attribute, callback){
     promise.then(function(payload){
         producer.send(payload, function (err, result) {
             console.log(err || result);
-            console.log("i am here");
-            console.log(result);
             callback(err || result);
             //process.exit();
         });
