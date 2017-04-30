@@ -93,6 +93,7 @@ router.post('/uploadImageToPipeline', function (req, res, next) {
                                                 console.log('Error - 4');
                                                 sendError({error: err.toString()});
                                             } else {
+                                                console.log("Image Saved to Database ==> " + imageObject);
                                                 console.log('Success - 4');
                                                 /* Save Image on Disk */
                                                 image.toBuffer('jpeg', {}, function(err, buffer){
@@ -116,7 +117,7 @@ router.post('/uploadImageToPipeline', function (req, res, next) {
                                                                 /* ---------------- PARTEEK ----------------- ADD YOUR CHANGES HERE TO PUSH IMAGE TO KAKFA HERE */
                                                                 try {
                                                                         kafkamessage.push(message.createMessage('keyed',"image", bufferedImageDataURI));
-                                                                        producer.sendMessage("Phase1Topicss",kafkamessage,0,0,function(result){
+                                                                        producer.sendMessage("Phase1Topic",kafkamessage,0,0,function(result){
                                                                             sendSuccess({response: 'Success'});
                                                                         });
 
