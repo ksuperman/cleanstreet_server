@@ -14,7 +14,12 @@ var imagePipelineSchema = new mongoose.Schema({
     server_image_url: {type: String, index: true},
     status: {type: String, index: true, default: 'N'},
     cocoMetaData: 'Mixed',
-    image_type: {type: String, index: true, default: 'training'}
+    image_type: {type: String, index: true, default: 'training'},
+    phase1Image: {type: 'Mixed'},
+    phase2Image: {type: 'Mixed'},
+    phase3Image: {type: 'Mixed'},
+    phase4Image: {type: 'Mixed'},
+    exifObj: {type: 'Mixed'}
 });
 
 imagePipelineSchema.plugin(autoIncrement.plugin, {model: 'imagePipeline', field: 'id'});

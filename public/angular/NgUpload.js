@@ -48,8 +48,7 @@ myApp.controller('myCtrl', ['$scope', 'fileUpload', function($scope, fileUpload)
         $scope.showProgress = true;
         reader.readAsDataURL(file);
         console.log('file is ' );
-        console.dir(file);
-
+        //console.dir(file);
     };
 
     $scope.imageIsLoaded = function(e){
