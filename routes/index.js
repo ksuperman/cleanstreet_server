@@ -118,7 +118,7 @@ router.post('/uploadImageToPipeline', function (req, res, next) {
                                                                 try {
                                                                         kafkamessage.push(message.createMessage('keyed',"image", bufferedImageDataURI));
                                                                         producer.sendMessage("Phase1Topic",kafkamessage,0,0,function(result){
-                                                                            sendSuccess({response: 'Success'});
+                                                                            sendSuccess({response: imageObject});
                                                                         });
 
                                                                 }
