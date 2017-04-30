@@ -30,11 +30,11 @@ myApp.service('fileUpload', ['$http', function ($http) {
             .then(function (result) {
                 //$scope.user = result;
                 $scope.showProgress = false;
-                console.log(JSON.stringify(result));
+                console.log("Request Processing Complete !!!");
             }, function(result) {
                 //some error
                 $scope.showProgress = false;
-                console.log("error" + result);
+                console.log("HTTP error" + result);
             });
     }
 }]);

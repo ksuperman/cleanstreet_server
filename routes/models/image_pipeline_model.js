@@ -15,10 +15,10 @@ var imagePipelineSchema = new mongoose.Schema({
     status: {type: String, index: true, default: 'N'},
     cocoMetaData: 'Mixed',
     image_type: {type: String, index: true, default: 'training'},
-    phase1Image: {type: 'Mixed'},
-    phase2Image: {type: 'Mixed'},
-    phase3Image: {type: 'Mixed'},
-    phase4Image: {type: 'Mixed'},
+    Phase1Image: {type: 'Mixed'},
+    Phase2Image: {type: 'Mixed'},
+    Phase3Image: {type: 'Mixed'},
+    Phase4Image: {type: 'Mixed'},
     exifObj: {type: 'Mixed'}
 });
 
