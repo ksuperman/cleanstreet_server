@@ -93,7 +93,7 @@ router.post('/uploadImageToPipeline', function (req, res, next) {
                                                 console.log('Error - 4');
                                                 sendError({error: err.toString()});
                                             } else {
-                                                console.log("Image Saved to Database ==> " + imageObject);
+                                                console.log("Image Saved to Database with imageId ==> " + imageId);
                                                 console.log('Success - 4');
                                                 /* Save Image on Disk */
                                                 image.toBuffer('jpeg', {}, function(err, buffer){
