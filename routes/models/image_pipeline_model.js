@@ -19,7 +19,8 @@ var imagePipelineSchema = new mongoose.Schema({
     Phase2Image: {type: 'Mixed'},
     Phase3Image: {type: 'Mixed'},
     Phase4Image: {type: 'Mixed'},
-    exifObj: {type: 'Mixed'}
+    exifObj: {type: 'Mixed'},
+    detectionResults: {type: 'Mixed'}
 });
 
 imagePipelineSchema.plugin(autoIncrement.plugin, {model: 'imagePipeline', field: 'id'});
