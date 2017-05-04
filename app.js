@@ -10,7 +10,7 @@ mongoose.connect('mongodb://' + config_file.mongodbServerURL + '/clean_street');
 
 /* Routes*/
 var index = require('./routes/index');
-var users = require('./routes/users');
+var imagepipeline = require('./routes/imagepipeline');
 var tools = require('./routes/tools');
 var producer = require('./routes/producer');
 var consumerGroup = require('./routes/ConsumerGroup');
@@ -37,7 +37,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static('images'));
 
 app.use('/', index);
-app.use('/users', users);
+app.use('/imagepipeline', imagepipeline);
 app.use('/tools', tools);
 
 // catch 404 and forward to error handler
