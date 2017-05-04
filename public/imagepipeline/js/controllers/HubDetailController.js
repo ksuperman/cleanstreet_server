@@ -160,31 +160,27 @@ angular.module('HubDetailController', [])
         $scope.startCanvas = function () {
 
             if ($scope.pipelineImage.detectionResults) {
-                //var result = JSON.parse($scope.pipelineImage.detectionResults);
-                var result = $scope.pipelineImage.detectionOptimizedResults;
+                var result = JSON.parse($scope.pipelineImage.detectionResults);
+                //var result = $scope.pipelineImage.detectionOptimizedResults;
                 var c = document.getElementById("myCanvas");
                 var ctx = c.getContext("2d");
-                ctx.canvas.width = window.innerWidth;
-                ctx.canvas.height = window.innerHeight;
-                var canvasHeight = window.innerHeight;
-                var canvasWidth = window.innerWidth;
 
                 var image = new Image();
                 image.crossOrigin = "Anonymous";
-                image.onload = function () {
-                    console.log("onload");
+                image.onload = function ()
+                {
                     var imgHeight = image.height;
                     var imgWidth = image.width;
-                    var scalingFactorx = canvasWidth / imgWidth;
-                    var scalingFactory = canvasHeight / imgHeight;
-                    ctx.drawImage(image, 0, 0, imgWidth, imgHeight, 0, 0, canvasWidth, canvasHeight);
-                    for (var j in result) {
-                        console.log(j);
-                        ctx.rect(result[j].bb.x * scalingFactorx, result[j].bb.y * scalingFactory, result[j].bb.w * scalingFactorx, result[j].bb.h * scalingFactory);
+                    ctx.canvas.width = imgWidth;
+                    ctx.canvas.height = imgHeight;
+                    ctx.drawImage(image, 0, 0, imgWidth, imgHeight);
+                    for (var j in result)
+                    {
+                        ctx.rect(result[j].bb.x, result[j].bb.y, result[j].bb.w, result[j].bb.h);
                         ctx.strokeStyle = "red";
                         ctx.stroke();
                         ctx.font = 'bold 8pt Calibri';
-                        ctx.fillText(result[j].trueClass, (result[j].bb.x + 5) * scalingFactorx, (result[j].bb.y - 4) * scalingFactory);
+                        ctx.fillText(result[j].trueClass, result[j].bb.x + 5, result[j].bb.y - 4);
                     }
                     $scope.pipelineImage.Phase3Image = c.toDataURL();
                     $scope.$apply();
