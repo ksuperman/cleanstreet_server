@@ -15,6 +15,11 @@ var image_model_od = require('./models/OD/image_model_od');
 var image_annotation_model_od = require('./models/OD/image_annotation_model_od');
 var image_scaled_annotation_model_od = require('./models/OD/image_scaled_annotation_model_od');
 
+/* Handle Default Routing */
+router.get('/', function (req, res, next) {
+    res.redirect(307, '/tools/annotationHub');
+});
+
 /* GET Annotation Hub Page */
 router.get('/annotationHub', function (req, res, next) {
     res.render('image_annotation_hub', {title: 'Clean Streets Framework'});
