@@ -130,8 +130,17 @@
                 </div>
                 <div class="card-reveal">
                     <span class="card-title grey-text text-darken-4">{{image.idString}}<i class="material-icons right">close</i></span>
-                    <div style="width: 600px; height: 400px; margin: 0 auto">
-                        <div id="container-image-{{image.idString}}" style="width: 300px; height: 200px; float: left">
+                    <div style="margin: 0 auto;" ng-if="image.cleanlinessScore">
+                        <h4>Cleanliness Score</h4>
+                        <h4>{{image.cleanlinessScore[0]}} %</h4>
+                        <div style="margin: 0 auto;" ng-if="image.cleanlinessScore[0] >= 66">
+                            <h5>Street Status - Clean</h5>
+                        </div>
+                        <div style="margin: 0 auto;" ng-if="image.cleanlinessScore[0] > 33 && image.cleanlinessScore[0] < 66">
+                            <h5>Street Status - Dirty</h5>
+                        </div>
+                        <div style="margin: 0 auto;" ng-if="image.cleanlinessScore[0] <= 33">
+                            <h5>Street Status - Very Dirty</h5>
                         </div>
                     </div>
                 </div>

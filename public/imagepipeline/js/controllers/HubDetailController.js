@@ -92,11 +92,12 @@ angular.module('HubDetailController', [])
                 if ($scope.pipelineImage.cleanlinessScore && $scope.pipelineImage.cleanlinessScore[0]) {
                     if ($scope.pipelineImage.cleanlinessScore[0] > 66){
                         $scope.cleanlinessStatus = "Clean";
-                    } else  if ($scope.pipelineImage.cleanlinessScore[0] > 33) {
+                    } else if ($scope.pipelineImage.cleanlinessScore[0] > 33) {
                         $scope.cleanlinessStatus = "Dirty";
                     } else {
                         $scope.cleanlinessStatus = "Very Dirty";
                     }
+                    $scope.$apply();
                 }
             }
         };
@@ -160,8 +161,8 @@ angular.module('HubDetailController', [])
         $scope.startCanvas = function () {
 
             if ($scope.pipelineImage.detectionResults) {
-                var result = JSON.parse($scope.pipelineImage.detectionResults);
-                //var result = $scope.pipelineImage.detectionOptimizedResults;
+                //var result = JSON.parse($scope.pipelineImage.detectionResults);
+                var result = $scope.pipelineImage.detectionOptimizedResults;
                 var c = document.getElementById("myCanvas");
                 var ctx = c.getContext("2d");
 
