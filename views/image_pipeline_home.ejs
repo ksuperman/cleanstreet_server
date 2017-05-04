@@ -62,6 +62,10 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+        .card .card-image img {
+            min-height: 250px;
+            max-height: 250px;
+        }
 
     </style>
 
@@ -71,12 +75,18 @@
     <script src="/bower_components/angular/angular.js"></script>
     <script src="/bower_components/piexifjs/piexif.js"></script>
 
+    <!-- Highcharts Library -->
+    <script src="/bower_components/highcharts/js/highcharts.js"></script>
+    <script src="/bower_components/highcharts/js/highcharts-more.js"></script>
+    <script src="/bower_components/highcharts/js/modules/solid-gauge.js"></script>
+
     <!-- Angular Application Init -->
     <script src="/imagepipeline/js/app.js"></script>
     <script src="/imagepipeline/js/controllers/PipelineHubController.js"></script>
     <script src="/imagepipeline/js/controllers/HeaderController.js"></script>
     <script src="/imagepipeline/js/controllers/ImageUploadController.js"></script>
     <script src="/imagepipeline/js/controllers/HubDisplayController.js"></script>
+    <script src="/imagepipeline/js/controllers/HubDetailController.js"></script>
 
 </head>
 
@@ -84,14 +94,16 @@
 <!-- Header -->
 <nav class="nav-extended" ng-controller="HeaderController">
     <div class="nav-wrapper">
-        <a href="/tools/annotationHub" class="brand-logo"><i class="material-icons header-icon">dashboard</i>Clean Streets</a>
+        <a href="/imagepipeline" class="brand-logo"><i class="material-icons header-icon">dashboard</i>Clean Streets</a>
         <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="/imagepipeline"><i class="material-icons left">dashboard</i>Image Pipeline Hub</a></li>
             <li><a href="/tools/annotationHubOD"><i class="material-icons left">dashboard</i>Object Detection Hub</a></li>
             <li><a href="/tools/annotationHub"><i class="material-icons left">dashboard</i>Street Detection Hub</a></li>
             <li><a href="https://github.com/ksuperman/cleanstreet_server"><i class="material-icons left">code</i>Github</a></li>
         </ul>
         <ul class="side-nav" id="mobile-demo">
+            <li><a href="/imagepipeline"><i class="material-icons left">dashboard</i>Image Pipeline Hub</a></li>
             <li><a href="/tools/annotationHubOD"><i class="material-icons left">dashboard</i>Object Detection Hub</a></li>
             <li><a href="/tools/annotationHub"><i class="material-icons left">dashboard</i>Street Detection Hub</a></li>
             <li><a href="https://github.com/ksuperman/cleanstreet_server"><i class="material-icons">code</i>Github</a></li>
@@ -114,24 +126,27 @@
                 </div>
                 <div class="card-content">
                     <span class="card-title activator grey-text text-darken-4">Image {{image.idString}}<i class="material-icons right">more_vert</i></span>
-                    <p><a href="#">View Details</a></p>
+                    <p><a href="/imagepipeline/image/{{image.id}}">View Details</a></p>
                 </div>
                 <div class="card-reveal">
                     <span class="card-title grey-text text-darken-4">{{image.idString}}<i class="material-icons right">close</i></span>
-                    <p>Here is some more information about this product that is only revealed once clicked on.</p>
+                    <div style="width: 600px; height: 400px; margin: 0 auto">
+                        <div id="container-image-{{image.idString}}" style="width: 300px; height: 200px; float: left">
+                        </div>
+                    </div>
                 </div>
                 <div class="card-action imagecards {{image.detectionResults?'done':'inprogess'}}">
                     <div ng-if="!image.detectionResults" class="progress image-in-progress">
                         <div class="indeterminate"></div>
                     </div>
                     <div ng-if="!image.detectionResults" class="image-status-container">
-                        <a href="#" class="image-status">
+                        <a href="/imagepipeline/image/{{image.id}}" class="image-status">
                             <i class="material-icons image-status-icon">storage</i>
-                            <span class="image-current-status-text" >Image is at <span class="image-phase-name">{{image.Phase3Image ? 'Phase 3 (Litter Clasification)' : (image.Phase2Image ? 'Phase 2 (Litter Detection)' :'Phase 1 (Street Detection)')}}</span></span>
+                            <span class="image-current-status-text" >Image is at <span class="image-phase-name">{{image.Phase3Image ? 'Phase 4 (Result Aggregation)' : (image.Phase2Image ? ' Phase 3 (Litter Clasification)' :(image.Phase1Image ? 'Phase 2 (Object Detection)':  'Phase 1 (Street Detection)'))}}</span></span>
                         </a>
                     </div>
                     <div ng-if="image.detectionResults" class="image-status-container">
-                        <a href="#" class="image-status">
+                        <a href="/imagepipeline/image/{{image.id}}" class="image-status">
                             <i class="material-icons image-status-icon">cloud_done</i>
                             <span class="image-current-status-text" >Image Processed</span>
                         </a>

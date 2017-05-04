@@ -4,8 +4,10 @@ angular.module('HubDisplayController', [])
         $scope.pipelineImage = [];
 
         function handlePipelineImageResponse(response) {
-            $scope.pipelineImage = $scope.pipelineImage.concat(response.data);
-            console.log("Pipeline Images Fetched == > ", $scope.pipelineImage);
+            if (response && response.data) {
+                response.data = response.data.slice().reverse();
+                $scope.pipelineImage = $scope.pipelineImage.concat(response.data);
+            }
         }
 
         function initHubPage() {

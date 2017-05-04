@@ -1,50 +1,250 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-    <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.css">
-    <script src="bower_components/jquery/dist/jquery.js"></script>
-    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
-    <script src = "bower_components/angular/angular.min.js"></script>
-    <script src="angular/NgUpload.js"></script>
+    <link rel="shortcut icon"
+          href="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Wikivoyage_fantasy_balloon_logo4_lenkastabilo_blues_favicon.svg/2000px-Wikivoyage_fantasy_balloon_logo4_lenkastabilo_blues_favicon.svg.png"
+          type="image/x-icon"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <title>Image Pipeline Detail Page</title>
+
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Core Styling CSS -->
+    <link rel="stylesheet" type="text/css" href="/bower_components/highcharts/css/highcharts.css"
+          media="screen,projection">
+    <link rel="stylesheet" type="text/css" href="/bower_components/materialize/dist/css/materialize.css"
+          media="screen,projection">
+
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+        main {
+            flex: 1 0 auto;
+        }
+        .main-layout{
+            padding: 10px;
+        }
+        .image-in-progress{
+            position: absolute;
+            top: -9px;
+            left: 0px;
+        }
+        .card-action.imagecards{
+            color: black;
+            text-align: center;
+        }
+        .card-action.done{
+            background: #bbf3bb;
+        }
+        .card-action.inprogess{
+            background: #ffffa9;
+        }
+        .image-status{
+            color: black !important;
+        }
+        i.material-icons.image-status-icon {
+            position: relative;
+            top: 6px;
+            left: -4px;
+            font-size: 25px
+        }
+        span.image-phase-name {
+            text-transform: initial;
+            font-weight: 900;
+            color: brown;
+            font-size: 16px;
+        }
+        .image-status-container {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .phasecols{
+            position: relative;
+            min-height: 300px !important;
+        }
+        .phase-names{
+            position: absolute;
+            z-index: 999;
+            top: 51px;
+            width:100%;
+        }
+        .phase-name-text{
+            color: rgba(255, 0, 0, 0.5);
+        }
+        .highcharts-credits{
+            visibility: hidden;
+        }
+        .loading-container{
+            position: absolute;
+            top: 155px;
+            left: 44%;
+        }
+        .cleanlinessGraph{
+            width: 300px;
+            height: 200px;
+            margin: auto;
+        }
+        .cleanCol{
+            text-align: center;
+        }
+    </style>
+
+    <!-- Core Scripts Init -->
+    <script src="/bower_components/jquery/dist/jquery.js"></script>
+    <script src="/bower_components/materialize/dist/js/materialize.js"></script>
+    <script src="/bower_components/angular/angular.js"></script>
+    <script src="/bower_components/piexifjs/piexif.js"></script>
+
+
+    <!-- Highcharts Library -->
+    <script src="/bower_components/highcharts/js/highcharts.js"></script>
+    <script src="/bower_components/highcharts/js/highcharts-more.js"></script>
+    <script src="/bower_components/highcharts/js/modules/solid-gauge.js"></script>
+
+    <!-- Angular Application Init -->
+    <script>
+        var image = <%- imageId %>;
+        console.log(image);
+    </script>
+    <script src="/imagepipeline/js/app.js"></script>
+    <script src="/imagepipeline/js/controllers/PipelineHubController.js"></script>
+    <script src="/imagepipeline/js/controllers/HeaderController.js"></script>
+    <script src="/imagepipeline/js/controllers/ImageUploadController.js"></script>
+    <script src="/imagepipeline/js/controllers/HubDisplayController.js"></script>
+    <script src="/imagepipeline/js/controllers/HubDetailController.js"></script>
+
 </head>
-<body ng-app="myApp">
-<center><h1><%= title %></h1></center>
-<div ng-controller="myCtrl" ng-init="showProgress=false">
-    <div class="well">
-        <div class="row">
-            <div class="col-md-4">
-            </div>
-            <div class="col-md-5">
-                <label class="btn btn-default btn-file"> <input
-                            type="file" file-model="myFile" />
-                </label>
-                <a href="#" class="btn btn-info btn-md" ng-click="uploadFile()">
-                    <span class="glyphicon glyphicon-cloud-upload"></span> Upload Image
-                </a>
-                </span>
-            </div>
-            <div class="col-md-3">
-            </div>
-        </div>
+
+<body ng-app="CleanStreetToolApplication">
+<!-- Header -->
+<nav class="nav-extended" ng-controller="HeaderController">
+    <div class="nav-wrapper">
+        <a href="/tools/annotationHub" class="brand-logo"><i class="material-icons header-icon">dashboard</i>Clean Streets</a>
+        <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="/tools/annotationHubOD"><i class="material-icons left">dashboard</i>Object Detection Hub</a></li>
+            <li><a href="/tools/annotationHub"><i class="material-icons left">dashboard</i>Street Detection Hub</a></li>
+            <li><a href="https://github.com/ksuperman/cleanstreet_server"><i class="material-icons left">code</i>Github</a></li>
+        </ul>
+        <ul class="side-nav" id="mobile-demo">
+            <li><a href="/tools/annotationHubOD"><i class="material-icons left">dashboard</i>Object Detection Hub</a></li>
+            <li><a href="/tools/annotationHub"><i class="material-icons left">dashboard</i>Street Detection Hub</a></li>
+            <li><a href="https://github.com/ksuperman/cleanstreet_server"><i class="material-icons">code</i>Github</a></li>
+        </ul>
     </div>
-    <div ng-if="imagePresent" align="center">
-        <div class="well">
-            <img ng-src="{{image}}" class="img-rounded" alt="Cinque Terre" width="304" height="236">
-        </div>
-        <div class="row" ng-show="showProgress">
-            <center>
-                <div class="container">
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-striped active"
-                             role="progressbar" aria-valuenow="100" aria-valuemin="0"
-                             aria-valuemax="100" style="width: 100%">Uploading Data</div>
+    <div class="nav-content">
+        <button data-target="imageUploadModal"
+                class="btn-floating btn-large halfway-fab waves-effect waves-light teal pulse">
+            <i class="material-icons">add</i>
+        </button>
+    </div>
+</nav>
+<!-- Main Layout -->
+<main class="main-layout" ng-controller="HubDetailController">
+    <div class="row">
+        <!-- Phase 1 -->
+        <div class="col s12 m6 l6 phasecols" >
+            <div class="loading-container" ng-if="!pipelineImage.Phase1Image">
+                <div class="preloader-wrapper big active">
+                    <div class="spinner-layer spinner-blue-only">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div><div class="gap-patch">
+                            <div class="circle"></div>
+                        </div><div class="circle-clipper right">
+                            <div class="circle"></div>
+                        </div>
                     </div>
                 </div>
-            </center>
+            </div>
+            <img class="materialboxed" width="100%" ng-src="{{pipelineImage.Phase1Image}}" data-caption="Phase 1 Output" ng-show="pipelineImage.Phase1Image">
+            <div class="caption center-align phase-names">
+                <h3 class="phase-name-text">Phase 1</h3>
+            </div>
+        </div>
+        <!-- Phase 2 -->
+        <div class="col s12 m6 l6 phasecols" >
+            <div class="loading-container" ng-if="!pipelineImage.Phase2Image">
+                <div class="preloader-wrapper big active">
+                    <div class="spinner-layer spinner-blue-only">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div><div class="gap-patch">
+                            <div class="circle"></div>
+                        </div><div class="circle-clipper right">
+                            <div class="circle"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <img class="materialboxed" width="100%" src="{{pipelineImage.Phase2Image}}" data-caption="Phase 2 Output" ng-show="pipelineImage.Phase2Image">
+            <div class="caption center-align phase-names">
+                <h3 class="phase-name-text">Phase 2</h3>
+            </div>
         </div>
     </div>
+    <!-- Phase 3 -->
+    <div class="row">
+        <div class="col s12 m12 l12 phasecols" >
+            <div class="loading-container" ng-if="!pipelineImage.Phase3Image">
+                <div class="preloader-wrapper big active">
+                    <div class="spinner-layer spinner-blue-only">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div><div class="gap-patch">
+                            <div class="circle"></div>
+                        </div><div class="circle-clipper right">
+                            <div class="circle"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <img class="materialboxed" width="100%" src="{{pipelineImage.Phase3Image}}" data-caption="Phase 3 Output" ng-show="pipelineImage.Phase3Image">
+            <div class="caption center-align phase-names">
+                <h3 class="phase-name-text">Phase 3</h3>
+            </div>
+        </div>
+    </div>
+    <div class="row" ng-if="pipelineImage.detectionOptimizedResults">
+        <div class="col s12 m6 l6 cleanCol" >
+            <div id="container-cleanliness" class="cleanlinessGraph"></div>
+            <h3>Current Status</h3>
+            <h4>{{cleanlinessStatus}}</h4>
+        </div>
+        <div class="col s12 m6 l6" >
+            <div id="container-image-litter-cat"></div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<% include footer %>
+
+<!-- Upload Image Modal Structure -->
+<div id="imageUploadModal" class="modal bottom-sheet" ng-controller="ImageUploadController">
+    <div class="modal-content">
+        <h5>Upload Image To Pipeline</h5>
+        <div class="file-field input-field">
+            <div class="btn">
+                <span>File</span>
+                <input id="imagefilepath" type="file" ng-model="imageUpload.imagefilepath" ng-change="fileSelected()">
+            </div>
+            <div class="file-path-wrapper">
+                <input id="imageFileName" class="file-path validate" type="text" ng-model="imageUpload.imageFileName">
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" id="closeUploadPrompt" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+        <a href="#!" class="waves-effect waves-light btn" ng-click="uploadFileToUrl()">Upload</a>
+    </div>
 </div>
+<canvas id="myCanvas" style="display:none; border: 1px solid black;"></canvas>
 </body>
 </html>
