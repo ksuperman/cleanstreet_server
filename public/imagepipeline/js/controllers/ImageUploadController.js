@@ -40,7 +40,7 @@ angular.module('ImageUploadController', [])
                 console.log(response);
                 $('#closeUploadPrompt').click();
                 Materialize.toast('Image Successfully Uploaded to the Server!', 1000, '', function () {
-
+                    window.location.href = '/imagepipeline';
                 });
             }
 
