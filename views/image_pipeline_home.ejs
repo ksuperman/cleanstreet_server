@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="shortcut icon"
+          href="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Wikivoyage_fantasy_balloon_logo4_lenkastabilo_blues_favicon.svg/2000px-Wikivoyage_fantasy_balloon_logo4_lenkastabilo_blues_favicon.svg.png"
+          type="image/x-icon"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <title>Image Pipeline Hub</title>
+
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Core Styling CSS -->
+    <link rel="stylesheet" type="text/css" href="/bower_components/materialize/dist/css/materialize.css"
+          media="screen,projection">
+
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+        main {
+            flex: 1 0 auto;
+        }
+        .main-layout{
+            padding: 10px;
+        }
+        .image-in-progress{
+            position: absolute;
+            top: -9px;
+            left: 0px;
+        }
+        .card-action.imagecards{
+            color: black;
+            text-align: center;
+        }
+        .card-action.done{
+            background: #bbf3bb;
+        }
+        .card-action.inprogess{
+            background: #ffffa9;
+        }
+        .image-status{
+            color: black !important;
+        }
+        i.material-icons.image-status-icon {
+            position: relative;
+            top: 6px;
+            left: -4px;
+            font-size: 25px
+        }
+        span.image-phase-name {
+            text-transform: initial;
+            font-weight: 900;
+            color: brown;
+            font-size: 16px;
+        }
+        .image-status-container {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+    </style>
+
+    <!-- Core Scripts Init -->
+    <script src="/bower_components/jquery/dist/jquery.js"></script>
+    <script src="/bower_components/materialize/dist/js/materialize.js"></script>
+    <script src="/bower_components/angular/angular.js"></script>
+    <script src="/bower_components/piexifjs/piexif.js"></script>
+
+    <!-- Angular Application Init -->
+    <script src="/imagepipeline/js/app.js"></script>
+    <script src="/imagepipeline/js/controllers/PipelineHubController.js"></script>
+    <script src="/imagepipeline/js/controllers/HeaderController.js"></script>
+    <script src="/imagepipeline/js/controllers/ImageUploadController.js"></script>
+    <script src="/imagepipeline/js/controllers/HubDisplayController.js"></script>
+
+</head>
+
+<body ng-app="CleanStreetToolApplication">
+<!-- Header -->
+<nav class="nav-extended" ng-controller="HeaderController">
+    <div class="nav-wrapper">
+        <a href="/tools/annotationHub" class="brand-logo"><i class="material-icons header-icon">dashboard</i>Clean Streets</a>
+        <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="/tools/annotationHubOD"><i class="material-icons left">dashboard</i>Object Detection Hub</a></li>
+            <li><a href="/tools/annotationHub"><i class="material-icons left">dashboard</i>Street Detection Hub</a></li>
+            <li><a href="https://github.com/ksuperman/cleanstreet_server"><i class="material-icons left">code</i>Github</a></li>
+        </ul>
+        <ul class="side-nav" id="mobile-demo">
+            <li><a href="/tools/annotationHubOD"><i class="material-icons left">dashboard</i>Object Detection Hub</a></li>
+            <li><a href="/tools/annotationHub"><i class="material-icons left">dashboard</i>Street Detection Hub</a></li>
+            <li><a href="https://github.com/ksuperman/cleanstreet_server"><i class="material-icons">code</i>Github</a></li>
+        </ul>
+    </div>
+    <div class="nav-content">
+        <button data-target="imageUploadModal"
+                class="btn-floating btn-large halfway-fab waves-effect waves-light teal pulse">
+            <i class="material-icons">add</i>
+        </button>
+    </div>
+</nav>
+<!-- Main Layout -->
+<main class="main-layout" ng-controller="HubDisplayController">
+    <div class="row">
+        <div class="col s12 m6 l4" ng-repeat="image in pipelineImage">
+            <div class="card sticky-action">
+                <div class="card-image waves-effect waves-block waves-light">
+                    <img class="activator" ng-src="{{image.image}}">
+                </div>
+                <div class="card-content">
+                    <span class="card-title activator grey-text text-darken-4">Image {{image.idString}}<i class="material-icons right">more_vert</i></span>
+                    <p><a href="#">View Details</a></p>
+                </div>
+                <div class="card-reveal">
+                    <span class="card-title grey-text text-darken-4">{{image.idString}}<i class="material-icons right">close</i></span>
+                    <p>Here is some more information about this product that is only revealed once clicked on.</p>
+                </div>
+                <div class="card-action imagecards {{image.detectionResults?'done':'inprogess'}}">
+                    <div ng-if="!image.detectionResults" class="progress image-in-progress">
+                        <div class="indeterminate"></div>
+                    </div>
+                    <div ng-if="!image.detectionResults" class="image-status-container">
+                        <a href="#" class="image-status">
+                            <i class="material-icons image-status-icon">storage</i>
+                            <span class="image-current-status-text" >Image is at <span class="image-phase-name">{{image.Phase3Image ? 'Phase 3 (Litter Clasification)' : (image.Phase2Image ? 'Phase 2 (Litter Detection)' :'Phase 1 (Street Detection)')}}</span></span>
+                        </a>
+                    </div>
+                    <div ng-if="image.detectionResults" class="image-status-container">
+                        <a href="#" class="image-status">
+                            <i class="material-icons image-status-icon">cloud_done</i>
+                            <span class="image-current-status-text" >Image Processed</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<% include footer %>
+
+<!-- Upload Image Modal Structure -->
+<div id="imageUploadModal" class="modal bottom-sheet" ng-controller="ImageUploadController">
+    <div class="modal-content">
+        <h5>Upload Image To Pipeline</h5>
+        <div class="file-field input-field">
+            <div class="btn">
+                <span>File</span>
+                <input id="imagefilepath" type="file" ng-model="imageUpload.imagefilepath" ng-change="fileSelected()">
+            </div>
+            <div class="file-path-wrapper">
+                <input id="imageFileName" class="file-path validate" type="text" ng-model="imageUpload.imageFileName">
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" id="closeUploadPrompt" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+        <a href="#!" class="waves-effect waves-light btn" ng-click="uploadFileToUrl()">Upload</a>
+    </div>
+</div>
+</body>
+</html>
