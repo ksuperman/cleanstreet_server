@@ -116,7 +116,7 @@ router.post('/getPipelineImages', function (req, res, next) {
                     }
                     imagesParsed[i].boundingBoxArea = boundingBoxArea;
                     imagesParsed[i].streetImageArea = (imagesParsed[i].width * imagesParsed[i].height)/3;
-                    imagesParsed[i].cleanlinessScore = [Math.floor((1 - (imagesParsed[i].boundingBoxArea / imagesParsed[i].streetImageArea))*100)];
+                    imagesParsed[i].cleanlinessScore = [Math.abs(Math.floor((1 - (imagesParsed[i].boundingBoxArea / imagesParsed[i].streetImageArea))*100))];
                 }
             }
             res.send(imagesParsed);
@@ -148,7 +148,7 @@ router.get('/image/:imageid', function (req, res, next) {
                             }
                             imagesParsed[i].boundingBoxArea = boundingBoxArea;
                             imagesParsed[i].streetImageArea = (imagesParsed[i].width * imagesParsed[i].height)/3;
-                            imagesParsed[i].cleanlinessScore =  [Math.floor((1 - (imagesParsed[i].boundingBoxArea / imagesParsed[i].streetImageArea))*100)];
+                            imagesParsed[i].cleanlinessScore = [Math.abs(Math.floor((1 - (imagesParsed[i].boundingBoxArea / imagesParsed[i].streetImageArea))*100))];
                         }
                     }
                     res.render('image_pipeline_detail_page', {imageId: JSON.stringify(imagesParsed[0])});
