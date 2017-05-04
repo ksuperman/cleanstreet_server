@@ -186,7 +186,7 @@ angular.module('HubDetailController', [])
                     $scope.$apply();
                     console.log("Done");
                 };
-                image.src = $scope.pipelineImage.image;
+                image.src = $scope.pipelineImage.server_image_url;
             }
         };
 
