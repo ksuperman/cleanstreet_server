@@ -56,9 +56,9 @@ function getDetectionResults(images, callback) {
                           for(j = 0;j < boundingBoxObjectArray.length; j++) {
                               if( k !== j && boundingBoxObjectArray[k] && boundingBoxObjectArray[j]) {
                                   var iou = getIOURatio(boundingBoxObjectArray[k], boundingBoxObjectArray[j]);
-                                  if(iou > 0.80) {
+                                  if(iou > 0.70) {
                                       console.log(boundingBoxObjectArray[k], boundingBoxObjectArray[j],iou);
-                                      boundingBoxObjectArray[k] = [];
+                                      boundingBoxObjectArray[j] = [];
                                   }
                               }
                           }
@@ -115,7 +115,7 @@ router.post('/getPipelineImages', function (req, res, next) {
                         boundingBoxArea += tempBoundingBoxArea;
                     }
                     imagesParsed[i].boundingBoxArea = boundingBoxArea;
-                    imagesParsed[i].streetImageArea = (imagesParsed[i].width * imagesParsed[i].height)/5;
+                    imagesParsed[i].streetImageArea = (imagesParsed[i].width * imagesParsed[i].height)/3;
                     imagesParsed[i].cleanlinessScore = [Math.floor((1 - (imagesParsed[i].boundingBoxArea / imagesParsed[i].streetImageArea))*100)];
                 }
             }
@@ -147,7 +147,7 @@ router.get('/image/:imageid', function (req, res, next) {
                                 boundingBoxArea += tempBoundingBoxArea;
                             }
                             imagesParsed[i].boundingBoxArea = boundingBoxArea;
-                            imagesParsed[i].streetImageArea = (imagesParsed[i].width * imagesParsed[i].height)/5;
+                            imagesParsed[i].streetImageArea = (imagesParsed[i].width * imagesParsed[i].height)/3;
                             imagesParsed[i].cleanlinessScore =  [Math.floor((1 - (imagesParsed[i].boundingBoxArea / imagesParsed[i].streetImageArea))*100)];
                         }
                     }
