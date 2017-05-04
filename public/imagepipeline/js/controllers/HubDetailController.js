@@ -33,9 +33,9 @@ angular.module('HubDetailController', [])
             // the value axis
             yAxis: {
                 stops: [
-                    [0.1, '#DF5353'], // green
-                    [0.5, '#DDDF0D'], // yellow
-                    [0.9, '#55BF3B'] // red
+                    [0.33, '#DF5353'], // red
+                    [0.66, '#f7a35c'], // yellow
+                    [0.9, '#55BF3B'] // green
                 ],
                 lineWidth: 0,
                 minorTickInterval: null,
@@ -160,7 +160,8 @@ angular.module('HubDetailController', [])
         $scope.startCanvas = function () {
 
             if ($scope.pipelineImage.detectionResults) {
-                var result = JSON.parse($scope.pipelineImage.detectionResults);
+                //var result = JSON.parse($scope.pipelineImage.detectionResults);
+                var result = $scope.pipelineImage.detectionOptimizedResults;
                 var c = document.getElementById("myCanvas");
                 var ctx = c.getContext("2d");
                 ctx.canvas.width = window.innerWidth;
