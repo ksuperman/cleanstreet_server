@@ -111,6 +111,7 @@ angular.module('HubDetailController', [])
                 y;
 
             if (detectionOptimizedResults && detectionOptimizedResults.length) {
+                console.log("DetectionOptimizedResults", detectionOptimizedResults);
                 for (var i = 0; i < detectionOptimizedResults.length; i++) {
                     name = detectionOptimizedResults[i].trueClass;
                     y = detectionOptimizedResults[i].bbArea;
@@ -180,12 +181,11 @@ angular.module('HubDetailController', [])
                         ctx.rect(result[j].bb.x, result[j].bb.y, result[j].bb.w, result[j].bb.h);
                         ctx.strokeStyle = "red";
                         ctx.stroke();
-                        ctx.font = 'bold 8pt Calibri';
-                        ctx.fillText(result[j].trueClass, result[j].bb.x + 5, result[j].bb.y - 4);
+                        ctx.font = 'bold 10pt Calibri';
+                        ctx.fillText(result[j].trueClass + "(" + (result[j].trueClassProb).toFixed(3) + ")", result[j].bb.x + 5, result[j].bb.y - 4);
                     }
                     $scope.pipelineImage.Phase3Image = c.toDataURL();
                     $scope.$apply();
-                    console.log("Done");
                 };
                 image.src = $scope.pipelineImage.server_image_url;
             }
